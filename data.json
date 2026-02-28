@@ -1,0 +1,252 @@
+{
+  "users": [
+    {
+      "_id": "admin-1",
+      "name": "Admin User",
+      "email": "admin@bdie.io",
+      "role": "Administrator",
+      "department": "Security Operations",
+      "baseline_profile": {
+        "activity_level": "high"
+      },
+      "risk_score": 92
+    },
+    {
+      "_id": "user-2",
+      "name": "Test Subject",
+      "email": "test@bdie.io",
+      "role": "Analyst",
+      "department": "Finance",
+      "baseline_profile": {
+        "activity_level": "medium"
+      },
+      "risk_score": 10
+    }
+  ],
+  "activityLogs": [
+    {
+      "_id": "log-1772275266902",
+      "user_id": "admin-1",
+      "event_type": "Privilege Escalation Attempt",
+      "anomaly_score": 85,
+      "timestamp": "2026-02-28T10:41:06.902Z"
+    },
+    {
+      "_id": "log-1772286176004",
+      "user_id": "admin-1",
+      "event_type": "Privilege Escalation Attempt",
+      "anomaly_score": 85,
+      "timestamp": "2026-02-28T13:42:56.004Z"
+    },
+    {
+      "_id": "log-1772286216038",
+      "user_id": "admin-1",
+      "event_type": "Mass File Download",
+      "anomaly_score": 92,
+      "timestamp": "2026-02-28T13:43:36.038Z"
+    },
+    {
+      "_id": "log-1772286914066",
+      "user_id": "admin-1",
+      "event_type": "Privilege Escalation Attempt",
+      "anomaly_score": 85,
+      "timestamp": "2026-02-28T13:55:14.066Z"
+    },
+    {
+      "_id": "log-1772287546885",
+      "user_id": "admin-1",
+      "event_type": "Privilege Escalation Attempt",
+      "anomaly_score": 85,
+      "timestamp": "2026-02-28T14:05:46.885Z"
+    },
+    {
+      "_id": "log-1772287747782",
+      "user_id": "admin-1",
+      "event_type": "Privilege Escalation Attempt",
+      "anomaly_score": 85,
+      "timestamp": "2026-02-28T14:09:07.782Z"
+    },
+    {
+      "_id": "log-1772287752068",
+      "user_id": "admin-1",
+      "event_type": "Communication Tone Shift",
+      "anomaly_score": 45,
+      "timestamp": "2026-02-28T14:09:12.068Z"
+    },
+    {
+      "_id": "log-1772287756562",
+      "user_id": "admin-1",
+      "event_type": "Multiple Failed Logins",
+      "anomaly_score": 78,
+      "timestamp": "2026-02-28T14:09:16.562Z"
+    },
+    {
+      "_id": "log-1772287908863",
+      "user_id": "admin-1",
+      "event_type": "Privilege Escalation Attempt",
+      "anomaly_score": 85,
+      "timestamp": "2026-02-28T14:11:48.863Z"
+    },
+    {
+      "_id": "log-1772288568008",
+      "user_id": "admin-1",
+      "event_type": "Mass File Download",
+      "anomaly_score": 92,
+      "timestamp": "2026-02-28T14:22:48.008Z"
+    }
+  ],
+  "notifications": [
+    {
+      "_id": "notif-1772275266902",
+      "user_id": "admin-1",
+      "title": "High Risk Alert",
+      "message": "User Admin User attempted to access restricted admin endpoints.",
+      "type": "critical",
+      "read": true,
+      "createdAt": "2026-02-28T10:41:06.902Z"
+    },
+    {
+      "_id": "notif-1772286176004",
+      "user_id": "admin-1",
+      "title": "High Risk Alert",
+      "message": "User Admin User attempted to access restricted admin endpoints.",
+      "type": "critical",
+      "read": true,
+      "createdAt": "2026-02-28T13:42:56.004Z"
+    },
+    {
+      "_id": "notif-1772286216038",
+      "user_id": "admin-1",
+      "title": "Critical Data Exfiltration Risk",
+      "message": "User Admin User downloaded 50GB of sensitive data.",
+      "type": "critical",
+      "read": true,
+      "createdAt": "2026-02-28T13:43:36.038Z"
+    },
+    {
+      "_id": "notif-1772286914066",
+      "user_id": "admin-1",
+      "title": "High Risk Alert",
+      "message": "User Admin User attempted to access restricted admin endpoints.",
+      "type": "critical",
+      "read": true,
+      "createdAt": "2026-02-28T13:55:14.066Z"
+    },
+    {
+      "_id": "notif-1772287546885",
+      "user_id": "admin-1",
+      "title": "High Risk Alert",
+      "message": "User Admin User attempted to access restricted admin endpoints.",
+      "type": "critical",
+      "read": true,
+      "createdAt": "2026-02-28T14:05:46.885Z"
+    },
+    {
+      "_id": "notif-1772287747782",
+      "user_id": "admin-1",
+      "title": "High Risk Alert",
+      "message": "User Admin User attempted to access restricted admin endpoints.",
+      "type": "critical",
+      "read": true,
+      "createdAt": "2026-02-28T14:09:07.782Z"
+    },
+    {
+      "_id": "notif-1772287752068",
+      "user_id": "admin-1",
+      "title": "Behavioral Anomaly",
+      "message": "Significant negative sentiment shift detected in Admin User's communications.",
+      "type": "warning",
+      "read": true,
+      "createdAt": "2026-02-28T14:09:12.068Z"
+    },
+    {
+      "_id": "notif-1772287756562",
+      "user_id": "admin-1",
+      "title": "Suspicious Login Activity",
+      "message": "Multiple failed login attempts detected for Admin User from unknown IPs.",
+      "type": "warning",
+      "read": true,
+      "createdAt": "2026-02-28T14:09:16.562Z"
+    },
+    {
+      "_id": "notif-1772287908863",
+      "user_id": "admin-1",
+      "title": "High Risk Alert",
+      "message": "User Admin User attempted to access restricted admin endpoints.",
+      "type": "critical",
+      "read": true,
+      "createdAt": "2026-02-28T14:11:48.863Z"
+    },
+    {
+      "_id": "notif-1772288568008",
+      "user_id": "admin-1",
+      "title": "Critical Data Exfiltration Risk",
+      "message": "User Admin User downloaded 50GB of sensitive data.",
+      "type": "critical",
+      "read": false,
+      "createdAt": "2026-02-28T14:22:48.008Z"
+    }
+  ],
+  "riskHistory": [
+    {
+      "_id": "hist-1772275266903",
+      "global_risk_score": 85,
+      "trigger_event": "Privilege Escalation Attempt",
+      "timestamp": "2026-02-28T10:41:06.903Z"
+    },
+    {
+      "_id": "hist-1772286176004",
+      "global_risk_score": 85,
+      "trigger_event": "Privilege Escalation Attempt",
+      "timestamp": "2026-02-28T13:42:56.004Z"
+    },
+    {
+      "_id": "hist-1772286216038",
+      "global_risk_score": 92,
+      "trigger_event": "Mass File Download",
+      "timestamp": "2026-02-28T13:43:36.038Z"
+    },
+    {
+      "_id": "hist-1772286914066",
+      "global_risk_score": 85,
+      "trigger_event": "Privilege Escalation Attempt",
+      "timestamp": "2026-02-28T13:55:14.066Z"
+    },
+    {
+      "_id": "hist-1772287546885",
+      "global_risk_score": 85,
+      "trigger_event": "Privilege Escalation Attempt",
+      "timestamp": "2026-02-28T14:05:46.885Z"
+    },
+    {
+      "_id": "hist-1772287747782",
+      "global_risk_score": 85,
+      "trigger_event": "Privilege Escalation Attempt",
+      "timestamp": "2026-02-28T14:09:07.782Z"
+    },
+    {
+      "_id": "hist-1772287752068",
+      "global_risk_score": 45,
+      "trigger_event": "Communication Tone Shift",
+      "timestamp": "2026-02-28T14:09:12.068Z"
+    },
+    {
+      "_id": "hist-1772287756562",
+      "global_risk_score": 78,
+      "trigger_event": "Multiple Failed Logins",
+      "timestamp": "2026-02-28T14:09:16.562Z"
+    },
+    {
+      "_id": "hist-1772287908863",
+      "global_risk_score": 85,
+      "trigger_event": "Privilege Escalation Attempt",
+      "timestamp": "2026-02-28T14:11:48.863Z"
+    },
+    {
+      "_id": "hist-1772288568008",
+      "global_risk_score": 92,
+      "trigger_event": "Mass File Download",
+      "timestamp": "2026-02-28T14:22:48.008Z"
+    }
+  ]
+}

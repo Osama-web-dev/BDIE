@@ -1,0 +1,35 @@
+services:
+  bdie:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bdie-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      # Optional: un-comment and set if you connect a real MongoDB
+      # - MONGODB_URI=mongodb://mongo:27017/bdie
+    volumes:
+      # Persist the JSON data store
+      - bdie-data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:3000/api/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+  # ── Optional MongoDB (un-comment to use a real DB) ──────────────────────────
+  # mongo:
+  #   image: mongo:7-jammy
+  #   container_name: bdie-mongo
+  #   environment:
+  #     MONGO_INITDB_DATABASE: bdie
+  #   volumes:
+  #     - mongo-data:/data/db
+  #   restart: unless-stopped
+
+volumes:
+  bdie-data: # mongo-data:
