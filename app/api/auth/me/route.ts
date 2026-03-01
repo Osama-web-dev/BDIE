@@ -1,25 +1,22 @@
-import { NextResponse } from 'next/server';
-import { getDbData } from '@/lib/jsonDb';
-import { cookies } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
+import { connectDB } from '@/lib/db';
+import { sanitizeUser } from '@/lib/auth';
+import { User } from '@/models/User';
+import { withAuth } from '@/middleware/withAuth';
 
-export async function GET() {
-  try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('auth_token');
-    
-    if (!token) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+/**
+ * Returns the current user's profile information.
+ */
+export const GET = withAuth(async (req, ctx, auth) => {
+  await connectDB();
 
-    const db = getDbData();
-    const user = db.users.find((u: any) => u._id === token.value);
-    
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
+  const user = await User.findById(auth.userId).lean();
 
-    return NextResponse.json({ user });
-  } catch (error) {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  if (!user) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
-}
+
+  return NextResponse.json({
+    user: sanitizeUser(user),
+  });
+});

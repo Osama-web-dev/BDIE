@@ -1,105 +1,71 @@
-import { NextResponse } from 'next/server';
-import { getDbData, saveDbData } from '@/lib/jsonDb';
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { connectDB } from '@/lib/db';
+import { runSimulation } from '@/lib/simulationEngine';
+import { withRole } from '@/middleware/withRole';
 
-export async function POST(req: Request) {
+const LaunchSimulationSchema = z.object({
+  scenario: z.enum(['privilege_escalation', 'data_hoarding', 'suspicious_logins', 'tone_shift']),
+  target_user_id: z.string().min(1),
+});
+
+/**
+ * Executes a risk simulation scenario.
+ * Admin/Analyst only.
+ */
+export const POST = withRole(['admin', 'analyst'], async (req: NextRequest, ctx, auth) => {
+  let body: unknown;
   try {
-    const { scenario } = await req.json();
-    const db = getDbData();
-
-    let targetScore = 12;
-    let eventType = 'Normal Activity';
-    let notifTitle = '';
-    let notifMessage = '';
-    let notifType = 'info';
-
-    // Get a random user to apply the simulation to, or the admin user
-    let user = db.users[0];
-    if (!user) {
-      user = {
-        _id: `user-${Date.now()}`,
-        name: 'Test Subject',
-        email: 'test@bdie.io',
-        role: 'Analyst',
-        department: 'Finance',
-        baseline_profile: { activity_level: 'medium' },
-        risk_score: 10
-      };
-      db.users.push(user);
-    }
-
-    if (scenario === 'privilege_escalation') {
-      targetScore = 85;
-      eventType = 'Privilege Escalation Attempt';
-      notifTitle = 'High Risk Alert';
-      notifMessage = `User ${user.name} attempted to access restricted admin endpoints.`;
-      notifType = 'critical';
-    } else if (scenario === 'data_hoarding') {
-      targetScore = 92;
-      eventType = 'Mass File Download';
-      notifTitle = 'Critical Data Exfiltration Risk';
-      notifMessage = `User ${user.name} downloaded 50GB of sensitive data.`;
-      notifType = 'critical';
-    } else if (scenario === 'suspicious_logins') {
-      targetScore = 78;
-      eventType = 'Multiple Failed Logins';
-      notifTitle = 'Suspicious Login Activity';
-      notifMessage = `Multiple failed login attempts detected for ${user.name} from unknown IPs.`;
-      notifType = 'warning';
-    } else if (scenario === 'tone_shift') {
-      targetScore = 45;
-      eventType = 'Communication Tone Shift';
-      notifTitle = 'Behavioral Anomaly';
-      notifMessage = `Significant negative sentiment shift detected in ${user.name}'s communications.`;
-      notifType = 'warning';
-    }
-
-    // Update user risk score
-    const userIndex = db.users.findIndex((u: any) => u._id === user._id);
-    if (userIndex !== -1) {
-      db.users[userIndex].risk_score = targetScore;
-    }
-
-    // Create activity log
-    db.activityLogs.push({
-      _id: `log-${Date.now()}`,
-      user_id: user._id,
-      event_type: eventType,
-      anomaly_score: targetScore,
-      timestamp: new Date().toISOString()
-    });
-
-    // Create notification
-    let newNotif = null;
-    if (scenario !== 'none') {
-      newNotif = {
-        _id: `notif-${Date.now()}`,
-        user_id: user._id,
-        title: notifTitle,
-        message: notifMessage,
-        type: notifType,
-        read: false,
-        createdAt: new Date().toISOString()
-      };
-      db.notifications.push(newNotif);
-    }
-
-    // Record risk history
-    db.riskHistory.push({
-      _id: `hist-${Date.now()}`,
-      global_risk_score: targetScore,
-      trigger_event: eventType,
-      timestamp: new Date().toISOString()
-    });
-
-    saveDbData(db);
-
-    return NextResponse.json({ 
-      success: true, 
-      newScore: targetScore,
-      notification: newNotif
-    });
-  } catch (error) {
-    console.error('Simulation error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
-}
+
+  const parsed = LaunchSimulationSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Validation failed', issues: parsed.error.issues }, { status: 422 });
+  }
+
+  const { scenario, target_user_id } = parsed.data;
+
+  await connectDB();
+
+  try {
+    const result = await runSimulation(
+      scenario,
+      target_user_id,
+      auth.userId
+    );
+
+    return NextResponse.json({
+      success: true,
+      result,
+    });
+  } catch (err) {
+    console.error('[Simulate API] Error:', err);
+    return NextResponse.json({
+      error: err instanceof Error ? err.message : 'Simulation failed'
+    }, { status: 500 });
+  }
+});
+
+/**
+ * List recent simulation history.
+ */
+import { Simulation } from '@/models/Simulation';
+
+export const GET = withRole(['admin', 'analyst'], async (req: NextRequest) => {
+  const url = new URL(req.url);
+  const limit = parseInt(url.searchParams.get('limit') || '20');
+
+  await connectDB();
+
+  const history = await Simulation.find()
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .populate('target_user_id', 'name email role')
+    .populate('triggered_by', 'name email')
+    .lean();
+
+  return NextResponse.json({ history });
+});

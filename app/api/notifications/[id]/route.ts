@@ -1,23 +1,37 @@
-import { NextResponse } from 'next/server';
-import { getDbData, saveDbData } from '@/lib/jsonDb';
+import { NextRequest, NextResponse } from 'next/server';
+import { connectDB } from '@/lib/db';
+import { Notification } from '@/models/Notification';
+import { withAuth } from '@/middleware/withAuth';
 
-export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  try {
-    const { id } = await params;
-    const { read } = await req.json();
-    const db = getDbData();
+/**
+ * Handle individual notification actions.
+ */
+export const PATCH = withAuth(async (req, { params }) => {
+  const { id } = await params;
+  await connectDB();
 
-    const notifIndex = db.notifications.findIndex((n: any) => n._id === id);
-    
-    if (notifIndex === -1) {
-      return NextResponse.json({ error: 'Notification not found' }, { status: 404 });
-    }
+  const notification = await Notification.findByIdAndUpdate(
+    id,
+    { read: true },
+    { new: true }
+  );
 
-    db.notifications[notifIndex].read = read;
-    saveDbData(db);
-
-    return NextResponse.json({ notification: db.notifications[notifIndex] });
-  } catch (error) {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  if (!notification) {
+    return NextResponse.json({ error: 'Notification not found' }, { status: 404 });
   }
-}
+
+  return NextResponse.json({ success: true });
+});
+
+export const DELETE = withAuth(async (req, { params }) => {
+  const { id } = await params;
+  await connectDB();
+
+  const notification = await Notification.findByIdAndDelete(id);
+
+  if (!notification) {
+    return NextResponse.json({ error: 'Notification not found' }, { status: 404 });
+  }
+
+  return NextResponse.json({ success: true });
+});

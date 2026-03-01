@@ -1,17 +1,40 @@
-import { NextResponse } from 'next/server';
-import { getDbData } from '@/lib/jsonDb';
+import { NextRequest, NextResponse } from 'next/server';
+import { connectDB } from '@/lib/db';
+import { Notification } from '@/models/Notification';
+import { withAuth } from '@/middleware/withAuth';
 
-export async function GET() {
-  try {
-    const db = getDbData();
-    
-    // Sort notifications by createdAt descending
-    const notifications = [...db.notifications].sort((a: any, b: any) => {
-      return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
-    }).slice(0, 20);
-    
-    return NextResponse.json({ notifications });
-  } catch (error) {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-  }
-}
+/**
+ * List the current user's notifications.
+ */
+export const GET = withAuth(async (req, ctx, auth) => {
+  await connectDB();
+
+  const notifications = await Notification.find({ recipient_id: auth.userId })
+    .sort({ createdAt: -1 })
+    .limit(50)
+    .lean();
+
+  const unreadCount = await Notification.countDocuments({
+    recipient_id: auth.userId,
+    read: false
+  });
+
+  return NextResponse.json({
+    notifications,
+    unread_count: unreadCount,
+  });
+});
+
+/**
+ * Mark all as read helper.
+ */
+export const PATCH = withAuth(async (req, ctx, auth) => {
+  await connectDB();
+
+  await Notification.updateMany(
+    { recipient_id: auth.userId, read: false },
+    { read: true }
+  );
+
+  return NextResponse.json({ success: true });
+});
