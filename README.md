@@ -4,13 +4,12 @@
 
 # 🔬 BDIE — Behavioral Drift Intelligence Engine
 
-**A production-grade, enterprise-scale insider threat detection platform. Featuring real-time behavioral analysis, weighted risk scoring, 3D digital twin visualization, and AI-driven explainability.**
+**An AI-powered insider threat detection platform with real-time behavioral analysis, 3D digital twin visualization, and predictive risk scoring.**
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat-square&logo=mongodb)](https://www.mongodb.com/)
-[![JWT](https://img.shields.io/badge/Auth-JWT-000000?style=flat-square&logo=json-web-tokens)](https://jwt.io/)
+[![Three.js](https://img.shields.io/badge/Three.js-r183-black?style=flat-square&logo=three.js)](https://threejs.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker)](https://www.docker.com/)
 
 </div>
@@ -19,15 +18,45 @@
 
 ## ✨ Features
 
-- **🛡️ Enterprise Authentication** — Secure JWT-based auth with Access (15m) and Refresh (7d) tokens, bcrypt hashing, and account lockout protection.
-- **👥 RBAC User Management** — Role-Based Access Control with defined permissions for **Admin**, **Analyst**, and **Viewer** roles.
-- **🧠 Advanced Risk Engine** — Weighted scoring algorithm analyzing 5 behavioral vectors: Login Anomaly, Privilege Escalation, File Access, Data Volume, and Tone Shift.
-- **📉 Behavioral Drift Index** — Real-time Euclidean distance calculation comparing current behavior against an established user baseline.
-- **🔮 AI Explainability Layer** — Factor-based risk breakdown with percentage contributions and historical trend snapshots.
-- **⚡ Simulation Pipeline** — Industrial-standard simulation of attack scenarios (Data Hoarding, Privilege Escalation, etc.) with persistent DB logs.
-- **📦 Digital Twin Visualization** — 3D WebGL model dynamically linked to real-time risk scores and behavioral state.
-- **🚨 Contextual Notifications** — Severity-based alerts with persistent state and click-to-nav context links.
-- **📝 Audit Trail** — Immutable audit logs for all administrative and automated actions within the system.
+- **🧠 Intelligence Command Center** — Real-time behavioral drift analysis with animated time-travel slider
+- **🔮 3D Digital Twin** — WebGL sphere that morphs and changes color based on live risk score
+- **📈 Predictive Risk Graph** — Historical + future forecast chart with confidence bands
+- **🚨 Smart Alert System** — Auto-triggers critical banners when risk score exceeds threshold
+- **⚡ Simulation Engine** — Run privilege escalation, data hoarding, and suspicious login scenarios
+- **👤 Rich Profile Page** — 4-tab user dashboard (Overview, Activity Log, Security, Preferences)
+- **⚙️ System Configuration** — Live sliders for AI model tuning, system health monitoring
+- **📊 Risk Analysis Module** — Expandable risk vector table with AI threat insights
+- **🖱️ 144Hz Custom Cursor** — Spring-physics ring cursor with Bézier ribbon trail
+- **🎬 AnimeJS Loading Screen** — Cinematic startup animation with equalizer bars
+
+---
+
+## 🖼️ Screenshots
+
+<table>
+  <tr>
+    <td><strong>Command Center (Dashboard)</strong></td>
+    <td><strong>Risk Analysis</strong></td>
+  </tr>
+  <tr>
+    <td><img src="public/screenshots/dashboard.png" alt="Dashboard" width="100%"></td>
+    <td><img src="public/screenshots/analysis.png" alt="Analysis" width="100%"></td>
+  </tr>
+  <tr>
+    <td><strong>Operator Profile</strong></td>
+    <td><strong>System Configuration</strong></td>
+  </tr>
+  <tr>
+    <td><img src="public/screenshots/profile.png" alt="Profile" width="100%"></td>
+    <td><img src="public/screenshots/settings.png" alt="Settings" width="100%"></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><strong>Secure Authentication</strong></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><img src="public/screenshots/login.png" alt="Login" width="60%"></td>
+  </tr>
+</table>
 
 ---
 
@@ -35,56 +64,94 @@
 
 ### Prerequisites
 
-- **Node.js**: ≥ 20.0
-- **MongoDB**: Local instance or Atlas Cluster
-- **Docker**: Optional (for containerized deployment)
+| Requirement | Version |
+|-------------|---------|
+| Node.js     | ≥ 20    |
+| npm         | ≥ 10    |
+| Docker      | ≥ 24 *(optional)* |
 
 ---
 
-### Installation & Local Setup
+### Option 1 — Local Development
 
 ```bash
-# 1. Clone & Enter
-git clone https://github.com/your-username/bdie-saas.git
-cd bdie-saas
+# 1. Clone the repository
+git clone https://github.com/your-username/behavioral-drift-intelligence-engine.git
+cd behavioral-drift-intelligence-engine
 
-# 2. Install Production Dependencies
+# 2. Install dependencies
 npm install
 
-# 3. Configure Environment
-cp .env.example .env.local
-# Edit .env.local with your MONGODB_URI and JWT secrets
-```
-
-### Development
-
-```bash
+# 3. Start the development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+**Default login credentials:**
+
+| Field    | Value           |
+|----------|-----------------|
+| Email    | `admin@bdie.io` |
+| Password | `password`      |
+
+---
+
+### Option 2 — Docker (Recommended for Production)
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/your-username/behavioral-drift-intelligence-engine.git
+cd behavioral-drift-intelligence-engine
+
+# 2. Build and run with Docker Compose
+docker compose up --build -d
+
+# 3. Open the app
+open http://localhost:3000
+
+# View logs
+docker compose logs -f bdie
+
+# Stop
+docker compose down
+```
+
+**Or build/run without Compose:**
+
+```bash
+docker build -t bdie .
+docker run -p 3000:3000 -d --name bdie-app bdie
+```
 
 ---
 
 ## 🗂️ Project Structure
 
 ```
-bdie/
+behavioral-drift-intelligence-engine/
 ├── app/
-│   ├── (dashboard)/     # Authenticated Route Group (Protected)
-│   ├── api/             # production-grade API routes (RBAC + Validation)
-│   └── login/           # Auth Portal
+│   ├── (dashboard)/          # Authenticated route group
+│   │   ├── dashboard/        # Command Center
+│   │   ├── analysis/         # Risk Analysis Module
+│   │   ├── profile/          # User Profile (4 tabs)
+│   │   └── settings/         # System Configuration
+│   ├── api/
+│   │   ├── auth/             # Login / Me / Logout endpoints
+│   │   └── notifications/    # Notification API
+│   └── login/                # Authentication page
 ├── components/
-│   ├── dashboard/       # Risk Charts, User Tables, Metrics
-│   ├── layout/          # Sidebar, Topbar, ThemeProvider
-│   ├── three/           # Digital Twin & Background System
-│   └── ui/              # Reusable Radix/Tailwind components
-├── lib/                 # Core Engine Logic (Risk, Simulation, Explainability, Auth)
-├── middleware/          # Next.js & API middleware (JWT, RBAC, Rate Limiting)
-├── models/              # Mongoose Production Schemas (User, RiskSnapshot, AuditLog, etc.)
-├── store/               # Zustand Global State
-├── animations/          # Anime.js & Framer Motion orchestration
-└── public/              # Static Assets & Screenshots
+│   ├── dashboard/            # MainDashboard, PredictiveGraph, DigitalTwin, etc.
+│   ├── layout/               # Sidebar, Topbar, RightPanel
+│   ├── three/                # WebGL BackgroundSystem
+│   └── ui/                   # CustomCursor, LoadingScreen, SmartAlertBanner
+├── store/
+│   └── useAppStore.ts        # Zustand global state
+├── data/                     # JSON database (file-based persistence)
+├── public/screenshots/       # README screenshots
+├── Dockerfile
+├── docker-compose.yml
+└── .dockerignore
 ```
 
 ---
@@ -93,60 +160,76 @@ bdie/
 
 | Layer | Technology |
 |-------|-----------|
-| **Frontend** | Next.js 15 (App Router), TypeScript 5.9, Tailwind CSS v4 |
-| **Backend** | Next.js API Routes, Node.js |
-| **Database** | **MongoDB Atlas** (Mongoose ODM) |
-| **Auth** | **JWT** (jsonwebtoken), **bcryptjs** |
-| **State** | Zustand 5 |
-| **Graphics** | Three.js (r183), @react-three/fiber |
-| **Animation** | AnimeJS v4, Framer Motion |
-| **Validation** | **Zod** (schemas), express-rate-limit (LRU) |
-| **DevOps** | Docker (Multi-stage), Vercel/AWS Ready |
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript 5.9 |
+| UI | React 19, Tailwind CSS v4 |
+| 3D Graphics | Three.js r183, @react-three/fiber, @react-three/drei |
+| Animation | AnimeJS v4, Framer Motion (motion) |
+| Charts | Recharts 3 |
+| State | Zustand 5 |
+| Icons | Lucide React |
+| Database | JSON file-store (dev) / MongoDB (prod, optional) |
 
 ---
 
 ## ⚙️ Environment Variables
 
-Required variables in `.env.local`:
+Create a `.env.local` file in the root (optional):
 
-```bash
-MONGODB_URI=mongodb+srv://...           # MongoDB Connection String
-JWT_ACCESS_SECRET=your_secret_here      # Min 64 chars
-JWT_REFRESH_SECRET=your_secret_here     # Min 64 chars
-JWT_ACCESS_EXPIRES_IN=15m
-JWT_REFRESH_EXPIRES_IN=7d
-ENABLE_REGISTRATION=true                # Set false in production
+```env
+# Optional: MongoDB connection string (falls back to JSON DB if not set)
+MONGODB_URI=mongodb://localhost:27017/bdie
+
+# Disable Next.js telemetry
+NEXT_TELEMETRY_DISABLED=1
 ```
 
 ---
 
-## 🔒 Security & Performance
+## 📦 Available Scripts
 
-- **Rate Limiting**: Integrated per-IP rate limiting (5 req/min for auth, 100 req/min for API).
-- **Sensitive Data**: Password hashes and tokens are never returned in API responses.
-- **Input Validation**: All API endpoints use strict Zod schema validation.
-- **Database**: Optimized with compound indexes for time-series risk queries and TTL collection purging for logs.
-- **Routing**: Next.js Edge Middleware enforces authentication before page rendering.
+```bash
+npm run dev      # Start development server (http://localhost:3000)
+npm run build    # Build production bundle
+npm run start    # Start production server
+npm run lint     # Run ESLint
+```
 
 ---
 
-## 🐳 Docker Deployment
+## 🔒 Security Notes
 
-Building the production container:
+- All dashboard routes are protected via middleware — unauthenticated users are redirected to `/login`
+- Auth token stored as an `httpOnly` cookie
+- Default credentials are for **demonstration only** — change before deploying to production
+- The JSON database in `/data` is suitable for demos; use MongoDB for production workloads
+
+---
+
+## 🐳 Docker Notes
+
+The Dockerfile uses a **3-stage multi-stage build**:
+
+1. **deps** — installs npm dependencies (layer-cached on `package.json`)
+2. **builder** — runs `next build` with standalone output mode
+3. **runner** — minimal Alpine image (~150 MB), runs as non-root user
 
 ```bash
-docker build -t bdie-prod .
-docker run -p 3000:3000 --env-file .env.local bdie-prod
+# Check container health
+docker inspect bdie-app --format='{{.State.Health.Status}}'
+
+# Shell into the container
+docker exec -it bdie-app sh
 ```
 
 ---
 
 ## 📄 License
 
-Internal Use - Corporate License © 2026 BDIE Enterprise.
+MIT © 2026 BDIE Project
 
 ---
 
 <div align="center">
-  <sub>Built for Security Professionals by the BDIE Team</sub>
+  <sub>Built with Next.js · Three.js · AnimeJS · Zustand · Tailwind CSS</sub>
 </div>
